@@ -1,31 +1,66 @@
 <template>
-  <Plotly :data="data" :layout="layout" />
+  <Bar
+    :chart-options="chartOptions"
+    :chart-data="chartData"
+    :chart-id="chartId"
+    :dataset-id-key="datasetIdKey"
+    :plugins="plugins"
+    :css-classes="cssClasses"
+    :styles="styles"
+    :width="width"
+    :height="height"
+  />
 </template>
 
 <script>
-import { Plotly } from 'vue-plotly'
+import { Bar } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 export default {
-    name: 'ChartPlot',
-    components: {
-        Plotly
+  name: 'ChartPlot',
+  components: { Bar },
+  props: {
+    chartId: {
+      type: String,
+      default: 'bar-chart'
     },
-    data(){
-        return {
-            data: [{
-                x:[1,2,3,4],
-                y:[10,15,13,17],
-                type:"histogram"
-            }],
-            layout:{
-                title: "test graph"
-            }
-        }
+    datasetIdKey: {
+      type: String,
+      default: 'label'
+    },
+    width: {
+      type: Number,
+      default: 10
+    },
+    height: {
+      type: Number,
+      default: 10
+    },
+    cssClasses: {
+      default: '',
+      type: String
+    },
+    styles: {
+      type: Object,
+      default: () => {}
+    },
+    plugins: {
+      type: Object,
+      default: () => {}
     }
-
+  },
+  data() {
+    return {
+      chartData: {
+        labels: [ '-1', '0', '1' ],
+        datasets: [ { data: [40, 20, -12] } ]
+      },
+      chartOptions: {
+        responsive: true
+      }
+    }
+  }
 }
 </script>
-
-<style>
-
-</style>

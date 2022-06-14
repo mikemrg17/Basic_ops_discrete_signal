@@ -29,7 +29,8 @@
         <br>
     </div>
     h(n=0): {{h0Value}}
-    <ChartPlot />
+    <br>
+    CHART:<ChartPlot :height="5" :width="10"/>
     <br>
     <br>
     <button id="btn-accept" @click="AcceptValues">Aceptar</button>
