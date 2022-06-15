@@ -2,8 +2,10 @@
     <div>
         <input type="number" v-model="valueA"><button class="add" @click="ASeqs">Amplificar/Atenuar</button>
         <div v-show="showCharts == 1">
+            X(n): {{AmX}}
             <ChartPlot :height="2" :width="4" :datasetIdKey="'X(n)'" :sequences="AxSeq"/>
             <br>
+            H(n): {{AmH}}
             <ChartPlot :height="2" :width="4" :datasetIdKey="'H(n)'" :sequences="AhSeq"/>
         </div>
     </div>

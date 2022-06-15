@@ -2,8 +2,10 @@
     <div>
         <button class="add" @click="ReflexSeqs">Reflejar</button>
         <div v-show="showCharts == 1">
+            X(n): {{RmX}}
             <ChartPlot :height="2" :width="4" :datasetIdKey="'X(n)'" :sequences="RxSeq"/>
             <br>
+            H(n): {{RmH}}
             <ChartPlot :height="2" :width="4" :datasetIdKey="'H(n)'" :sequences="RhSeq"/>
         </div>
     </div>

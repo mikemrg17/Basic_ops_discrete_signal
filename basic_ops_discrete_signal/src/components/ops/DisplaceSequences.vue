@@ -2,8 +2,10 @@
     <div>
         <input type="number" v-model="Displace" class="seq-len"/> <button class="add" @click="DisSeqs">Desplazar</button>
         <div v-show="showCharts == 1">
+            X(n): {{DmX}}
             <ChartPlot :height="2" :width="4" :datasetIdKey="'X(n)'" :sequences="DxSeq"/>
             <br>
+            H(n): {{DmH}}
             <ChartPlot :height="2" :width="4" :datasetIdKey="'H(n)'" :sequences="DhSeq"/>
         </div>
     </div>
