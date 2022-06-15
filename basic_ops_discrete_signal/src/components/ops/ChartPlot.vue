@@ -1,5 +1,5 @@
 <template>
-  <Bar
+  <Scatter
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
@@ -13,18 +13,21 @@
 </template>
 
 <script>
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { Scatter } from 'vue-chartjs/legacy'
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, PointElement, LinearScale, Filler } from 'chart.js'
+
+ChartJS.register( Title, Tooltip, Legend, LineElement, CategoryScale, PointElement, LinearScale, Filler)
 
 export default {
   name: 'ChartPlot',
-  components: { Bar },
+  components: {
+    Scatter
+  },
   props: {
     chartId: {
       type: String,
-      default: 'bar-chart'
+      default: 'scatter-chart'
     },
     datasetIdKey: {
       type: String,
@@ -32,11 +35,11 @@ export default {
     },
     width: {
       type: Number,
-      default: 10
+      default: 4
     },
     height: {
       type: Number,
-      default: 10
+      default: 5
     },
     cssClasses: {
       default: '',
@@ -47,20 +50,34 @@ export default {
       default: () => {}
     },
     plugins: {
-      type: Object,
-      default: () => {}
+      type: Array,
+      default: () => []
+    },
+    sequences:{
+        type: Array,
+        default: () => []
     }
   },
   data() {
     return {
       chartData: {
-        labels: [ '-1', '0', '1' ],
-        datasets: [ { data: [40, 20, -12] } ]
+        datasets: [
+          {
+            label: this.datasetIdKey,
+            borderColor: '#f87979',
+            backgroundColor: '#f87979',
+            data: []
+          }
+        ]
       },
       chartOptions: {
-        responsive: true
+        responsive: true,
+        maintainAspectRatio: false,
       }
     }
+  },
+  mounted(){
+    this.chartData.datasets[0].data = this.sequences
   }
 }
 </script>

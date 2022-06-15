@@ -1,12 +1,10 @@
 <template>
     <div>
-        Sumar/Restar
-        <p>xseq={{xseq}}</p>
-        <p>hseq={{hseq}}</p>
-        Suma:{{sum}}
+        Suma: {{Addition}}
+        <ChartPlot v-if="SumSeqArray != []" :height="2" :width="4" :datasetIdKey="'Suma'" :sequences="SumSeqArray"/>
         <br>
-        Resta:{{sub}}
-        <ChartPlot/>
+        Resta: {{Substraction}}
+        <ChartPlot v-if="SubSeqArray != []" :height="2" :width="4" :datasetIdKey="'Resta'" :sequences="SubSeqArray"/>
     </div>
 </template>
 
@@ -17,6 +15,10 @@ export default {
     name: "AddSequences",
     data(){
         return {
+            Addition: [],
+            Substraction: [],
+            SumSeqArray: [],
+            SubSeqArray: []
         }
     },
     props:{
@@ -37,27 +39,39 @@ export default {
             default: 0
         }
     },
-    methods:{
-    },
-    computed:{
-        sum(){
-            let addition = []
-            for(let i = 0; i < this.xseq.length; i++){
-                addition.push(this.xseq[i] + this.hseq[i])
-            }
-
-            return addition
-        },
-        sub(){
-            let substraction = []
-            for(let i = 0; i < this.xseq.length; i++){
-                substraction.push(this.xseq[i] - this.hseq[i])
-            }
-            return substraction
-        }
-    },
     components:{
         ChartPlot
+    },
+    mounted(){
+        let addition = []
+        for(let i = 0; i < this.xseq.length; i++){
+            addition.push(this.xseq[i] + this.hseq[i])
+        }
+        this.Addition = addition
+
+        let substraction = []
+        for(let i = 0; i < this.xseq.length; i++){
+            substraction.push(Number(this.xseq[i] - this.hseq[i]))
+        }
+        this.Substraction = substraction
+
+        let xAxises = 0 - this.x0value
+        for(let i = 0; i < this.Addition.length; i++){
+            this.SumSeqArray.push({
+                x: Number(xAxises),
+                y: Number(this.Addition[i])
+            })
+            xAxises++
+        }
+
+        xAxises = 0 - this.x0Value
+        for(let j = 0; j < this.Substraction.length; j++){
+            this.SubSeqArray.push({
+                x: Number(xAxises),
+                y: Number(this.Substraction[j])
+            })
+            xAxises++
+        }
     }
 }
 </script>

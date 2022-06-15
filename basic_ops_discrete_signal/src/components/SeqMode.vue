@@ -30,7 +30,12 @@
     </div>
     h(n=0): {{h0Value}}
     <br>
-    CHART:<ChartPlot :height="5" :width="10"/>
+    <div id="charts" v-show="showCharts == 1">
+        X(n):
+        <ChartPlot :height="2" :width="4" :datasetIdKey="'X(n)'" :sequences="XSeqArray"/>
+        H(n):
+        <ChartPlot :height="2" :width="4" :datasetIdKey="'H(n)'" :sequences="HSeqArray"/>
+    </div>
     <br>
     <br>
     <button id="btn-accept" @click="AcceptValues">Aceptar</button>
@@ -45,13 +50,19 @@
       <div class="opt" @click="changeCon">Convolución</div>
     </div>
     <hr>
-    <div v-show="showOps == 1">
+    <div v-if="showOps == 1">
         <div v-show="OpOpt == 1" class="ops">
-        <AddSequences :xseq="XSeq" :hseq="HSeq" :x0value="x0Value" :h0value="h0Value"/>
+            <AddSequences :xseq="XSeq" :hseq="HSeq" :x0value="Number(x0Value)" :h0value="Number(h0Value)"/>
         </div>
-        <div v-show="OpOpt == 2" class="ops"></div>
-        <div v-show="OpOpt == 3" class="ops"></div>
-        <div v-show="OpOpt == 4" class="ops"></div>
+        <div v-show="OpOpt == 2" class="ops">
+            <AmpSequences :xseq="XSeq" :hseq="HSeq" :x0value="Number(x0Value)" :h0value="Number(h0Value)"/>
+        </div>
+        <div v-show="OpOpt == 3" class="ops">
+            <ReflexSequences :xseq="XSeq" :hseq="HSeq" :x0value="Number(x0Value)" :h0value="Number(h0Value)"/>
+        </div>
+        <div v-show="OpOpt == 4" class="ops">
+            <DisplaceSequences :xseq="XSeq" :hseq="HSeq" :x0value="Number(x0Value)" :h0value="Number(h0Value)"/>
+        </div>
         <div v-show="OpOpt == 5" class="ops"></div>
         <div v-show="OpOpt == 6" class="ops"></div>
     </div>
@@ -62,13 +73,19 @@
 import NumSlot from './NumSlot.vue'
 import AddSequences from './ops/AddSequences.vue'
 import ChartPlot from './ops/ChartPlot.vue'
+import AmpSequences from './ops/AmpSequences.vue'
+import ReflexSequences from './ops/ReflexSequences.vue'
+import DisplaceSequences from './ops/DisplaceSequences.vue'
 
 export default {
     name: 'SeqMode',
     components:{
     NumSlot,
+    ChartPlot,
     AddSequences,
-    ChartPlot
+    AmpSequences,
+    ReflexSequences,
+    DisplaceSequences
 },
     data(){
         return {
@@ -79,24 +96,27 @@ export default {
             XSeq: [],
             HSeq: [],
             OpOpt: 0,
-            showOps: 0
+            showOps: 0,
+            showCharts : 0,
+            XSeqArray: [],
+            HSeqArray: []
         }
     },
     methods:{
         AddXValue(){
-            this.XSeq.push(this.xValue)
+            this.XSeq.push(Number(this.xValue))
             this.xValue = 0
         },
         AddHValue(){
-            this.HSeq.push(this.hValue)
+            this.HSeq.push(Number(this.hValue))
             this.hValue = 0
         },
         AcceptValues(){
             if(this.x0Value > this.XSeq.length-1 || this.h0Value > this.HSeq.length-1){
                 alert("Asegúrate de no poner un n=0 mayor a la cantidad de índices de la secuencia")
             }else{
-                alert("Valores aceptados")
                 this.balanceSeq()
+                this.fillSeqArrays()
                 this.showOps = 1
             }
         },
@@ -180,7 +200,30 @@ export default {
                 maxN = 'h'
             
             return maxN
+        },
+        DisplayCharts(){
+            this.showCharts = !this.showCharts
+        },
+        fillSeqArrays(){
+            let xAxises = 0 - this.x0Value
+            for(let i = 0; i < this.XSeq.length; i++){
+                this.XSeqArray.push({
+                    x: xAxises,
+                    y: this.XSeq[i]
+                })
+                xAxises++
+            }
+
+            xAxises = 0 - this.h0Value
+            for(let i = 0; i < this.HSeq.length; i++){
+                this.HSeqArray.push({
+                    x: xAxises,
+                    y: this.HSeq[i]
+                })
+                xAxises++
+            }
         }
+        
     }
 }
 </script>
@@ -255,5 +298,10 @@ export default {
 
     .seq-len{
         width: 3em;
+    }
+
+    #charts {
+        margin: auto;
+        width: 60%;
     }
 </style>

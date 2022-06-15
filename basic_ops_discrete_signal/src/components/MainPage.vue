@@ -81,6 +81,7 @@ export default {
   }
 
   .opt {
+    text-align: center;
     padding: 10px;
     margin: auto;
     width: 50%;
@@ -89,6 +90,10 @@ export default {
 
   .opt:hover {
     border-bottom: 2px solid #566573;
+  }
+
+  .hello{
+    text-align: center;
   }
 
 </style>
